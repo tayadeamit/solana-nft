@@ -18,7 +18,7 @@ import { programIds } from './programIds';
 const sleepUtil = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-export const NETWORK = clusterApiUrl("devnet");
+export const NETWORK = clusterApiUrl("testnet");
 export const AR_SOL_HOLDER_ID = new PublicKey(
     'HvwC9QSAzvGXhhVrgPmauVwFWcYZhne3hVot9EbHuFTm',
 );
@@ -219,8 +219,6 @@ export const TOKEN_PROGRAM_ID = programIds.token
     }
   }
 
-
-
 /**
  * Helpder function to detect whether Phantom wallet extension installed or not
  * @param {*} connectToWallet 
@@ -301,7 +299,8 @@ extendBorsh();
     provider,
     env,
     files,
-    metadata){
+    metadata,
+    nftUrl){
 
     const wallet = provider
     const metadataContent = {
@@ -440,8 +439,8 @@ extendBorsh();
     const metadataFile = result.messages?.find(
       m => m.filename === RESERVED_TXN_MANIFEST,
     );
-    console.log('arweave.net = ', metadataFile)
-    let arweaveLink = "https://arweave.net/i3SncSYZrH3HMKQxyOP4vIrPspzcab9eFcGKdPuKe-4"
+    // console.log('arweave.net = ', nftUrl 
+    let arweaveLink = nftUrl
     if(metadataFile?.transactionId) {
        arweaveLink = `https://arweave.net/${metadataFile.transactionId}`
     }

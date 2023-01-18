@@ -14,6 +14,7 @@ const connection = new Connection(NETWORK);
 function App() {
 
   const [provider, setProvider] = useState()
+  const [nftUrl, setNftUrl] = useState("https://storage.googleapis.com/fractal-launchpad-public-assets/tinycolony-chars/assets/9875.json")
   const [providerPubKey, setProviderPub] = useState()
   const [nftDetails, setNftDetails] = useState({})
   const [nftBurnSignature, setNftBurnSignature] = useState()
@@ -26,6 +27,7 @@ function App() {
 
 const mintNewNFT = async () =>{
   try{
+    console.log(nftUrl)
     const img = await convertDOMtoBase64();
     const templateImage = dataURLtoFile(img, 'My_NFT.png');
     const ownerPublicKey = new PublicKey(provider.publicKey).toBase58();
@@ -55,7 +57,8 @@ const mintNewNFT = async () =>{
       {},
       [templateImage],
       metadata,
-      1000000000
+      nftUrl,
+      1000000000,
     );
     console.log("Minted nft: ", _nft)
     setNftDetails(_nft)
@@ -122,15 +125,18 @@ const connectToWallet = () =>{
     }
   },[])
 
+
   return (
     <div className="App">
       <header className="App-header">
           
            <button onClick={connectToWallet}> {providerPubKey ? 'Connected' : 'Connect'} to wallet {providerPubKey ? (providerPubKey).toBase58() : ""}</button>
+
            
            <img src={nftImage} style={{width:"200px"}} id="nftImage"></img>
           <button onClick={mintNewNFT}> {nftDetails && nftDetails.mintKey ? `NFT created, mintkey: ${nftDetails.mintKey}`:'Create NFT' } </button>
           <button onClick={burnNFT}> {nftBurnSignature ? `NFT burnt, signature: ${nftBurnSignature}`:'Burn NFT' } </button>
+          <input type="text" value={nftUrl} onChange={(e)=> setNftUrl(e?.target?.value.trim())}/>
       </header>
     </div>
   );
